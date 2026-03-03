@@ -1,5 +1,5 @@
 from pathlib import Path
-#import argparse
+import argparse
 import datetime as dt
 import random
 import pandas as pd
@@ -39,16 +39,27 @@ def generate_trainings(trainings, users, start_date, days, seed):
     return pd.DataFrame(rows, columns=["training_id", "user_id", "activity_type", "duration_minutes", "calories", "date"])
 
 
+def parse_args():
+    parser  = argparse.ArgumentParser()
+    parser.add_argument("--users", type=int, default=10, help="users")
+    parser.add_argument("--trainings", type=int, default=100, help="trainings")
+    parser.add_argument("--start_date", type=str, default="2026-01-01", help="start date")
+    parser.add_argument("--days", type=int, default=60, help="days")
+    parser.add_argument("--seed", type=int, default=42, help="seed")
+
+    return parser.parse_args()
+
+
 def main():
     DATA_DIR.mkdir(exist_ok=True)
 
-    #args = parse_args()
+    args = parse_args()
 
-    users = 10
-    trainings = 30
-    start_date = dt.date.fromisoformat("2026-01-01")
-    days = 60
-    seed = 17
+    users = args.users
+    trainings = args.trainings
+    start_date = dt.date.fromisoformat(args.start_date)
+    days = args.days
+    seed = args.seed
 
     users_data = generate_users(users, seed)
     trainings_data = generate_trainings(trainings, users, start_date, days, seed)
