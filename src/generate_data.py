@@ -7,7 +7,7 @@ import pandas as pd
 BASE_DIR = Path(__file__).resolve().parents[1]
 DATA_DIR = BASE_DIR / "data"
 
-ACTIVITIES = ["RUNNING", "WALKING", "CYCLING", "STRENGHT", "SWIMMING"]
+ACTIVITIES = ["RUNNING", "WALKING", "CYCLING", "STRENGTH", "SWIMMING"]
 
 
 def generate_users(users, seed):
