@@ -5,12 +5,10 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 BASE_DIR = Path(__file__).resolve().parents[1]
-DB_PATH = BASE_DIR/"fitness.db"
-SQL_DIR = BASE_DIR/"sql"
 OUTPUT_DIR = BASE_DIR/"output"
 
 
-def plotting(df_activity, df_daily):
+def plotting(df_activity, df_daily, df_top_users):
 
     plt.figure()
     plt.bar(df_activity["activity_type"], df_activity["total_calories"])
@@ -32,6 +30,15 @@ def plotting(df_activity, df_daily):
     plt.savefig(OUTPUT_DIR / "daily_calories_trend.png")
     plt.show()
 
+    plt.figure()
+    plt.bar(df_top_users["user_id"].astype(str), df_top_users["total_calories"])
+    plt.title("Top 5 users by total calories")
+    plt.xlabel("User ID")
+    plt.ylabel("Total calories")
+    plt.tight_layout()
+    plt.savefig(OUTPUT_DIR / "top_users_total_calories.png")
+    plt.show()
+
 
 def main():
     OUTPUT_DIR.mkdir(exist_ok=True)
@@ -39,11 +46,13 @@ def main():
     conn = get_connection()
     df_activity = read_sql_query(conn, "activity.sql")
     df_daily = read_sql_query(conn, "daily.sql")
+    df_top_users = read_sql_query(conn, "top_users.sql")
 
     df_activity.to_csv(OUTPUT_DIR / "activity_report.csv", index=False)
     df_daily.to_csv(OUTPUT_DIR / "daily_report.csv", index=False)
+    df_top_users.to_csv(OUTPUT_DIR / "top_users_report.csv", index=False)
 
-    plotting(df_activity, df_daily)
+    plotting(df_activity, df_daily, df_top_users)
 
 
 if __name__ == "__main__":
